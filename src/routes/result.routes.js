@@ -1,24 +1,28 @@
 import { Router } from "express";
+
 import { authenticate } from "../middlewares/auth.middleware.js";
-import { upload } from "../middlewares/upload.js"; 
 
 import {
-  createNotice,
-  getPublishedNotices,
-  getNoticeById,
-  updatedNotice,
-  deleteNotice,
-} from "../controllers/notice.controller.js";
+  createResult,
+  getResults,
+  getSingleResult,
+  updateResult,
+  deleteResult,
+  getAnalytics,
+  getOverallSummary,
+} from "../controllers/result.controller.js";
 
 const router = Router();
 
 // Public routes
-router.get("/notices", getPublishedNotices);
-router.get("/notices/:id", getNoticeById);
+router.get("/results/analytics", getAnalytics);
+router.get("/results/summary", getOverallSummary);
+router.get("/results", getResults);
+router.get("/results/:id", getSingleResult);
 
-// Admin routes (Protected)
-router.post("/admin/notices", authenticate, upload.single('image'), createNotice);
-router.patch("/admin/notices/:id", authenticate, upload.single('image'), updatedNotice);
-router.delete("/admin/notices/:id", authenticate, deleteNotice);
+// Admin routes (authentication required)
+router.post("/admin/results", authenticate, createResult);
+router.patch("/admin/results/:id", authenticate, updateResult);
+router.delete("/admin/results/:id", authenticate, deleteResult);
 
 export default router;
